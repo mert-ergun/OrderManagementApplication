@@ -3,6 +3,12 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### Config ###
+*.properties
+
+### Binary ###
+*.jar
+
 ### Eclipse ###
 .apt_generated
 .classpath
