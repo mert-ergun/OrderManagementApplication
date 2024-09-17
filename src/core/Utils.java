@@ -1,5 +1,7 @@
 package core;
 
+import javax.swing.*;
+
 public class Utils {
     public static void centerFrame(javax.swing.JFrame frame) {
         java.awt.Dimension dim = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -12,5 +14,9 @@ public class Utils {
 
     public static boolean isPasswordValid(char[] password) {
         return password.length >= 4;
+    }
+
+    public static void showErrorMessage(String message, String title, JFrame parent) {
+        JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
     }
 }
