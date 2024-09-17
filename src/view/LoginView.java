@@ -67,6 +67,7 @@ public class LoginView extends JFrame {
             this.dispose();
             // Show a message dialog with the user's name
             JOptionPane.showMessageDialog(this, "Hoşgeldin " + user.getName(), "Başarılı!", JOptionPane.INFORMATION_MESSAGE);
+            new DashboardView(user);
         });
     }
 }
