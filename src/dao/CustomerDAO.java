@@ -71,6 +71,23 @@ public class CustomerDAO {
         return customers;
     }
 
+    public ArrayList<Customer> filterCustomers(String name, Customer.CustomerType type) {
+        String query = "SELECT * FROM customer WHERE name ILIKE ? AND type = ?::\"CustomerType\"";
+        var customers = new ArrayList<Customer>();
+        try {
+            var ps = connection.prepareStatement(query);
+            ps.setString(1, "%" + name + "%");
+            ps.setString(2, type.name());
+            var rs = ps.executeQuery();
+            while (rs.next()) {
+                customers.add(match(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customers;
+    }
+
     public void addCustomer(Customer customer) {
         String query = "INSERT INTO customer (name, type, phone, email, address) VALUES (?, ?::\"CustomerType\", ?, ?, ?)";
         try {
