@@ -12,6 +12,10 @@ public class Utils {
         return email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
     }
 
+    public static boolean isProductCodeValid(String code) {
+        return code.length() >= 4 && code.matches("^[a-zA-Z0-9-]+$");
+    }
+
     public static boolean isPasswordValid(char[] password) {
         return password.length >= 4;
     }
