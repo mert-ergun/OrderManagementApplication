@@ -56,21 +56,6 @@ public class CustomerDAO {
         return null;
     }
 
-    public Customer getCustomer(Customer.CustomerType type) {
-        String query = "SELECT * FROM customer WHERE type = ?::\"CustomerType\"";
-        try {
-            var ps = connection.prepareStatement(query);
-            ps.setString(1, type.name());
-            var rs = ps.executeQuery();
-            if (rs.next()) {
-                return match(rs);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-
     public ArrayList<Customer> getCustomers() {
         String query = "SELECT * FROM customer";
         var customers = new ArrayList<Customer>();
