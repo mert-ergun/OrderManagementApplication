@@ -72,6 +72,36 @@ public class CustomerDAO {
     }
 
     public ArrayList<Customer> filterCustomers(String name, Customer.CustomerType type) {
+        if (type == null) {
+            String query = "SELECT * FROM customers WHERE name ILIKE ?";
+            var customers = new ArrayList<Customer>();
+            try {
+                var ps = connection.prepareStatement(query);
+                ps.setString(1, "%" + name + "%");
+                var rs = ps.executeQuery();
+                while (rs.next()) {
+                    customers.add(match(rs));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return customers;
+        } else if (name.isEmpty()) {
+            String query = "SELECT * FROM customers WHERE type = ?::\"CustomerType\"";
+            var customers = new ArrayList<Customer>();
+            try {
+                var ps = connection.prepareStatement(query);
+                ps.setString(1, type.name());
+                var rs = ps.executeQuery();
+                while (rs.next()) {
+                    customers.add(match(rs));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return customers;
+        }
+
         String query = "SELECT * FROM customers WHERE name ILIKE ? AND type = ?::\"CustomerType\"";
         var customers = new ArrayList<Customer>();
         try {

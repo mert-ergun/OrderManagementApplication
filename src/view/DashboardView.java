@@ -84,6 +84,8 @@ public class DashboardView extends JFrame {
     private void clearFilters() {
         this.txt_f_customer_name.setText("");
         this.cmb_f_customer_type.setSelectedIndex(0);
+
+        loadCustomerTable(null);
     }
 
     private void filterCustomers() {
@@ -93,7 +95,13 @@ public class DashboardView extends JFrame {
             case 2 -> Customer.CustomerType.CORPORATE;
             default -> null;
         };
-        // TODO: Filter customers
+        if (type == null && name.isEmpty()) {
+            loadCustomerTable(null);
+            return;
+        }
+
+        ArrayList<Customer> customers = customerController.filterCustomers(name, type);
+        loadCustomerTable(customers);
     }
 
     private void loadCustomerTable(ArrayList<Customer> customers) {
@@ -122,6 +130,8 @@ public class DashboardView extends JFrame {
         this.tbl_customer.getColumnModel().getColumn(0).setMaxWidth(50);
         this.tbl_customer.getColumnModel().getColumn(2).setMinWidth(100);
         this.tbl_customer.getColumnModel().getColumn(2).setMaxWidth(100);
+
+        this.tbl_customer.getTableHeader().setReorderingAllowed(false);
 
         this.tbl_customer.setDefaultEditor(Object.class, null);
     }
