@@ -67,7 +67,13 @@ public class DashboardView extends JFrame {
         });
 
         this.btn_f_customer_new.addActionListener(e -> {
-            new CustomerView(this);
+            CustomerView customerView = new CustomerView(this);
+            customerView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    filterCustomers();
+                }
+            });
         });
     }
 
@@ -91,7 +97,7 @@ public class DashboardView extends JFrame {
         loadCustomerTable(null);
     }
 
-    public void filterCustomers() {
+    private void filterCustomers() {
         String name = this.txt_f_customer_name.getText();
         Customer.CustomerType type = switch (this.cmb_f_customer_type.getSelectedIndex()) {
             case 1 -> Customer.CustomerType.INDIVIDUAL;
@@ -156,7 +162,13 @@ public class DashboardView extends JFrame {
 
             int customerId = (int) this.tbl_customer.getValueAt(selectedRow, 0);
             Customer customer = customerController.getCustomer(customerId);
-            new CustomerView(this, customer);
+            CustomerView customerView = new CustomerView(this, customer);
+            customerView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    filterCustomers();
+                }
+            });
         });
 
         itemDelete.addActionListener(e -> {

@@ -25,7 +25,7 @@ public class CustomerView extends JFrame {
     private JLabel lbl_phone;
     private JTextField txt_phone;
     private JLabel lbl_address;
-    private JTextField txt_address;
+    private JTextArea txt_address;
     private JPanel pnl_bottom;
     private JPanel pnl_top;
     private JButton btn_save;
@@ -80,20 +80,26 @@ public class CustomerView extends JFrame {
         if (name.isEmpty() || email.isEmpty() || type.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Lütfen tüm alanları doldurunuz.");
             return;
+        } else if (!Utils.isEmailValid(email)) {
+            JOptionPane.showMessageDialog(this, "Lütfen geçerli bir e-posta adresi giriniz.");
+            return;
         }
 
         Customer.CustomerType customerType = type.equals("Bireysel") ? Customer.CustomerType.INDIVIDUAL : Customer.CustomerType.CORPORATE;
 
         if (customer != null) {
-            customerController.updateCustomer(new Customer(customer.getId(), name, customerType, email, phone, address));
+            this.customer.setName(name);
+            this.customer.setType(customerType);
+            this.customer.setEmail(email);
+            this.customer.setPhone(phone);
+            this.customer.setAddress(address);
+            customerController.updateCustomer(this.customer);
             JOptionPane.showMessageDialog(this, "Müşteri başarıyla güncellendi.");
             this.dispose();
-            dashboardView.filterCustomers();
             return;
         }
         customerController.addCustomer(name, customerType, email, phone, address);
         JOptionPane.showMessageDialog(this, "Müşteri başarıyla kaydedildi.");
-        dashboardView.filterCustomers();
         this.dispose();
     }
 }
