@@ -38,4 +38,8 @@ public class CustomerController {
     public void deleteCustomer(Customer customer) {
         customerDAO.deleteCustomer(customer);
     }
+
+    public void deleteCustomer(int id) {
+        customerDAO.deleteCustomer(id);
+    }
 }
