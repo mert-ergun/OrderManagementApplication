@@ -32,12 +32,15 @@ public class DashboardView extends JFrame {
     private JLabel lbl_f_customer_type;
     private JTable tbl_customer;
 
+    private JPopupMenu customerMenu = new JPopupMenu();
+
     public DashboardView(User user) {
         this.user = user;
         configureFrame();
         setComboBox();
         setListeners();
         loadCustomerTable(null);
+        loadCustomerMenu();
     }
 
     private void configureFrame() {
@@ -134,6 +137,42 @@ public class DashboardView extends JFrame {
         this.tbl_customer.getTableHeader().setReorderingAllowed(false);
 
         this.tbl_customer.setDefaultEditor(Object.class, null);
+    }
+
+    private void loadCustomerMenu() {
+        JMenuItem itemUpdate = new JMenuItem("Güncelle");
+        JMenuItem itemDelete = new JMenuItem("Sil");
+
+        customerMenu.add(itemUpdate);
+        customerMenu.add(itemDelete);
+
+        tbl_customer.setComponentPopupMenu(customerMenu);
+
+        itemUpdate.addActionListener(e -> {
+            int selectedRow = this.tbl_customer.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+
+            int customerId = (int) this.tbl_customer.getValueAt(selectedRow, 0);
+            Customer customer = customerController.getCustomer(customerId);
+            // TODO: new CustomerView(customer);
+        });
+
+        itemDelete.addActionListener(e -> {
+            int selectedRow = this.tbl_customer.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+
+            int customerId = (int) this.tbl_customer.getValueAt(selectedRow, 0);
+            int choice = JOptionPane.showConfirmDialog(this, "Müşteriyi silmek istediğinize emin misiniz?", "Müşteri Sil", JOptionPane.YES_NO_OPTION);
+            if (choice != JOptionPane.YES_OPTION) {
+                return;
+            }
+            customerController.deleteCustomer(customerId);
+            filterCustomers();
+        });
     }
 
 }
