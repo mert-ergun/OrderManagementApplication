@@ -19,4 +19,14 @@ public class Utils {
     public static void showErrorMessage(String message, String title, JFrame parent) {
         JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
     }
+
+    public static String translateCustomerType(String type) {
+        return switch (type) {
+            case "INDIVIDUAL" -> "Bireysel";
+            case "CORPORATE" -> "Kurumsal";
+            case "Bireysel" -> "INDIVIDUAL";
+            case "Kurumsal" -> "CORPORATE";
+            default -> "Belirtilmemiş";
+        };
+    }
 }
