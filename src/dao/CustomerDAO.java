@@ -118,15 +118,15 @@ public class CustomerDAO {
         return customers;
     }
 
-    public void addCustomer(Customer customer) {
+    public void addCustomer(String name, Customer.CustomerType type, String email, String phone, String address) {
         String query = "INSERT INTO customers (name, type, phone, email, address) VALUES (?, ?::\"CustomerType\", ?, ?, ?)";
         try {
             var ps = connection.prepareStatement(query);
-            ps.setString(1, customer.getName());
-            ps.setString(2, customer.getType().name());
-            ps.setString(3, customer.getPhone());
-            ps.setString(4, customer.getEmail());
-            ps.setString(5, customer.getAddress());
+            ps.setString(1, name);
+            ps.setString(2, type.name());
+            ps.setString(3, phone);
+            ps.setString(4, email);
+            ps.setString(5, address);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -27,8 +27,8 @@ public class CustomerController {
         return customerDAO.filterCustomers(name, type);
     }
 
-    public void addCustomer(Customer customer) {
-        customerDAO.addCustomer(customer);
+    public void addCustomer(String name, Customer.CustomerType type, String email, String phone, String address) {
+        customerDAO.addCustomer(name, type, email, phone, address);
     }
 
     public void updateCustomer(Customer customer) {
