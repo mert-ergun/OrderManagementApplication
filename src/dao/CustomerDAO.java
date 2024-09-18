@@ -1,5 +1,6 @@
 package dao;
 
+import core.Database;
 import entity.Customer;
 
 import java.sql.Connection;
@@ -10,8 +11,8 @@ import java.util.ArrayList;
 public class CustomerDAO {
     private Connection connection;
 
-    public CustomerDAO(Connection connection) {
-        this.connection = connection;
+    public CustomerDAO() {
+        this.connection = Database.getInstance();
     }
 
     public Customer match(ResultSet rs) throws SQLException {
