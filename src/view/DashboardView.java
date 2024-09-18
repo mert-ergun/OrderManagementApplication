@@ -1,9 +1,11 @@
 package view;
 
 import business.CustomerController;
+import business.ProductController;
 import core.Utils;
 import entity.Customer;
 import entity.User;
+import entity.Product;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +16,9 @@ public class DashboardView extends JFrame {
     private static final int FRAME_HEIGHT = 600;
     private static final String FRAME_TITLE = "Müşteri Yönetim Ekranı";
     private final User user;
+
     private final CustomerController customerController = new CustomerController();
+    private final ProductController productController = new ProductController();
 
     private JPanel container;
     private JLabel txt_welcome;
@@ -31,16 +35,32 @@ public class DashboardView extends JFrame {
     private JLabel lbl_f_customer_name;
     private JLabel lbl_f_customer_type;
     private JTable tbl_customer;
+    private JPanel pnl_product;
+    private JScrollPane scrl_product;
+    private JTable tbl_product;
+    private JLabel lbl_f_product_name;
+    private JTextField txt_f_product_name;
+    private JLabel lbl_f_product_code;
+    private JTextField txt_f_product_code;
+    private JLabel lbl_f_product_stock;
+    private JComboBox cmb_f_product_stock;
+    private JButton btn_product_filter;
+    private JButton btn_f_clear_product;
+    private JButton btn_f_product_new;
 
     private JPopupMenu customerMenu = new JPopupMenu();
+    private JPopupMenu productMenu = new JPopupMenu();
 
     public DashboardView(User user) {
         this.user = user;
         configureFrame();
-        setComboBox();
+        setComboBoxCustomer();
+        setComboBoxProduct();
         setListeners();
         loadCustomerTable(null);
+        loadProductTable(null);
         loadCustomerMenu();
+        loadProductMenu();
     }
 
     private void configureFrame() {
@@ -59,7 +79,7 @@ public class DashboardView extends JFrame {
         });
 
         this.btn_f_clear.addActionListener(e -> {
-            clearFilters();
+            clearFiltersCustomer();
         });
 
         this.btn_customer_filter.addActionListener(e -> {
@@ -75,9 +95,17 @@ public class DashboardView extends JFrame {
                 }
             });
         });
+
+        this.btn_f_clear_product.addActionListener(e -> {
+            clearFiltersProduct();
+        });
+
+        this.btn_product_filter.addActionListener(e -> {
+            filterProducts();
+        });
     }
 
-    private void setComboBox() {
+    private void setComboBoxCustomer() {
         DefaultComboBoxModel<String> customerTypes = new DefaultComboBoxModel<>();
         customerTypes.addElement("Hepsi");
         customerTypes.addElement("Bireysel");
@@ -85,16 +113,32 @@ public class DashboardView extends JFrame {
         this.cmb_f_customer_type.setModel(customerTypes);
     }
 
+    private void setComboBoxProduct() {
+        DefaultComboBoxModel<String> stockTypes = new DefaultComboBoxModel<>();
+        stockTypes.addElement("Hepsi");
+        stockTypes.addElement("Stokta Var");
+        stockTypes.addElement("Stokta Yok");
+        this.cmb_f_product_stock.setModel(stockTypes);
+    }
+
     private void handleLogout() {
         this.dispose();
         new LoginView();
     }
 
-    private void clearFilters() {
+    private void clearFiltersCustomer() {
         this.txt_f_customer_name.setText("");
         this.cmb_f_customer_type.setSelectedIndex(0);
 
         loadCustomerTable(null);
+    }
+
+    private void clearFiltersProduct() {
+        this.txt_f_product_name.setText("");
+        this.txt_f_product_code.setText("");
+        this.cmb_f_product_stock.setSelectedIndex(0);
+
+        loadProductTable(null);
     }
 
     private void filterCustomers() {
@@ -111,6 +155,19 @@ public class DashboardView extends JFrame {
 
         ArrayList<Customer> customers = customerController.filterCustomers(name, type);
         loadCustomerTable(customers);
+    }
+
+    private void filterProducts() {
+        String name = this.txt_f_product_name.getText();
+        String code = this.txt_f_product_code.getText();
+        int stockType = this.cmb_f_product_stock.getSelectedIndex();
+        if (stockType == 0 && name.isEmpty() && code.isEmpty()) {
+            loadProductTable(null);
+            return;
+        }
+
+        ArrayList<Product> products = productController.filterProducts(name, code, stockType);
+        loadProductTable(products);
     }
 
     private void loadCustomerTable(ArrayList<Customer> customers) {
@@ -143,6 +200,39 @@ public class DashboardView extends JFrame {
         this.tbl_customer.getTableHeader().setReorderingAllowed(false);
 
         this.tbl_customer.setDefaultEditor(Object.class, null);
+    }
+
+    private void loadProductTable(ArrayList<Product> products) {
+        if (products == null) {
+            products = productController.getProducts();
+        }
+
+        String[] columnNames = {"ID", "Ad", "Kod", "Fiyat", "Stok"};
+
+        Object[][] data = new Object[products.size()][5];
+
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
+            data[i][0] = product.getId();
+            data[i][1] = product.getName();
+            data[i][2] = product.getCode();
+            data[i][3] = product.getPrice();
+            data[i][4] = product.getStock();
+        }
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        this.tbl_product.setModel(model);
+
+        this.tbl_product.getColumnModel().getColumn(0).setMinWidth(50);
+        this.tbl_product.getColumnModel().getColumn(0).setMaxWidth(50);
+        this.tbl_product.getColumnModel().getColumn(3).setMinWidth(100);
+        this.tbl_product.getColumnModel().getColumn(3).setMaxWidth(100);
+        this.tbl_product.getColumnModel().getColumn(4).setMinWidth(50);
+        this.tbl_product.getColumnModel().getColumn(4).setMaxWidth(50);
+
+        this.tbl_product.getTableHeader().setReorderingAllowed(false);
+
+        this.tbl_product.setDefaultEditor(Object.class, null);
     }
 
     private void loadCustomerMenu() {
@@ -184,6 +274,54 @@ public class DashboardView extends JFrame {
             }
             customerController.deleteCustomer(customerId);
             filterCustomers();
+        });
+    }
+
+    private void loadProductMenu() {
+        JMenuItem itemUpdate = new JMenuItem("Güncelle");
+        JMenuItem itemDelete = new JMenuItem("Sil");
+
+        productMenu.add(itemUpdate);
+        productMenu.add(itemDelete);
+
+        tbl_product.setComponentPopupMenu(productMenu);
+
+        itemUpdate.addActionListener(e -> {
+            int selectedRow = this.tbl_product.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+
+            int productId = (int) this.tbl_product.getValueAt(selectedRow, 0);
+            Product product = productController.getProduct(productId);
+
+            /** TODO:
+             * ProductView productView = new ProductView(this, product);
+             *             productView.addWindowListener(new java.awt.event.WindowAdapter() {
+             *                 @Override
+             *                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+             *                     loadProductTable(null);
+             *                 }
+             *             });
+             */
+
+            System.out.println("Ürün güncelleme ekranı açılacak");
+
+        });
+
+        itemDelete.addActionListener(e -> {
+            int selectedRow = this.tbl_product.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+
+            int productId = (int) this.tbl_product.getValueAt(selectedRow, 0);
+            int choice = JOptionPane.showConfirmDialog(this, "Ürünü silmek istediğinize emin misiniz?", "Ürün Sil", JOptionPane.YES_NO_OPTION);
+            if (choice != JOptionPane.YES_OPTION) {
+                return;
+            }
+            productController.deleteProduct(productId);
+            loadProductTable(null);
         });
     }
 
