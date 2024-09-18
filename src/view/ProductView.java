@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class ProductView extends JFrame {
     private static final int FRAME_WIDTH = 400;
-    private static final int FRAME_HEIGHT = 600;
+    private static final int FRAME_HEIGHT = 500;
     private static final String FRAME_TITLE = "Ürün Düzenleme Ekranı";
     private final Product product;
     private final DashboardView dashboardView;
