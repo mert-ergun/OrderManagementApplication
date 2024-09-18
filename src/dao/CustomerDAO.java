@@ -27,7 +27,7 @@ public class CustomerDAO {
     }
 
     public Customer getCustomer(int id) {
-        String query = "SELECT * FROM customer WHERE id = ?";
+        String query = "SELECT * FROM customers WHERE id = ?";
         try {
             var ps = connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -42,7 +42,7 @@ public class CustomerDAO {
     }
 
     public Customer getCustomer(String name) {
-        String query = "SELECT * FROM customer WHERE name = ?";
+        String query = "SELECT * FROM customers WHERE name = ?";
         try {
             var ps = connection.prepareStatement(query);
             ps.setString(1, name);
@@ -57,7 +57,7 @@ public class CustomerDAO {
     }
 
     public ArrayList<Customer> getCustomers() {
-        String query = "SELECT * FROM customer";
+        String query = "SELECT * FROM customers";
         var customers = new ArrayList<Customer>();
         try {
             var ps = connection.prepareStatement(query);
@@ -72,7 +72,7 @@ public class CustomerDAO {
     }
 
     public ArrayList<Customer> filterCustomers(String name, Customer.CustomerType type) {
-        String query = "SELECT * FROM customer WHERE name ILIKE ? AND type = ?::\"CustomerType\"";
+        String query = "SELECT * FROM customers WHERE name ILIKE ? AND type = ?::\"CustomerType\"";
         var customers = new ArrayList<Customer>();
         try {
             var ps = connection.prepareStatement(query);
@@ -89,7 +89,7 @@ public class CustomerDAO {
     }
 
     public void addCustomer(Customer customer) {
-        String query = "INSERT INTO customer (name, type, phone, email, address) VALUES (?, ?::\"CustomerType\", ?, ?, ?)";
+        String query = "INSERT INTO customers (name, type, phone, email, address) VALUES (?, ?::\"CustomerType\", ?, ?, ?)";
         try {
             var ps = connection.prepareStatement(query);
             ps.setString(1, customer.getName());
@@ -104,7 +104,7 @@ public class CustomerDAO {
     }
 
     public void updateCustomer(Customer customer) {
-        String query = "UPDATE customer SET name = ?, type = ?::\"CustomerType\", phone = ?, email = ?, address = ? WHERE id = ?";
+        String query = "UPDATE customers SET name = ?, type = ?::\"CustomerType\", phone = ?, email = ?, address = ? WHERE id = ?";
         try {
             var ps = connection.prepareStatement(query);
             ps.setString(1, customer.getName());
@@ -120,7 +120,7 @@ public class CustomerDAO {
     }
 
     public void deleteCustomer(Customer customer) {
-        String query = "DELETE FROM customer WHERE id = ?";
+        String query = "DELETE FROM customers WHERE id = ?";
         try {
             var ps = connection.prepareStatement(query);
             ps.setInt(1, customer.getId());
