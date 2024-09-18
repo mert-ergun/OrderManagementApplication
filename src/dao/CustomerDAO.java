@@ -150,14 +150,7 @@ public class CustomerDAO {
     }
 
     public void deleteCustomer(Customer customer) {
-        String query = "DELETE FROM customers WHERE id = ?";
-        try {
-            var ps = connection.prepareStatement(query);
-            ps.setInt(1, customer.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        deleteCustomer(customer.getId());
     }
 
     public void deleteCustomer(int id) {
