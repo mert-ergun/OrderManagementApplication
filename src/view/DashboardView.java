@@ -1,16 +1,20 @@
 package view;
 
+import business.CustomerController;
 import core.Utils;
 import entity.Customer;
 import entity.User;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 
 public class DashboardView extends JFrame {
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
     private static final String FRAME_TITLE = "Müşteri Yönetim Ekranı";
     private final User user;
+    private final CustomerController customerController = new CustomerController();
 
     private JPanel container;
     private JLabel txt_welcome;
@@ -33,6 +37,7 @@ public class DashboardView extends JFrame {
         configureFrame();
         setComboBox();
         setListeners();
+        loadCustomerTable(null);
     }
 
     private void configureFrame() {
@@ -91,6 +96,34 @@ public class DashboardView extends JFrame {
         // TODO: Filter customers
     }
 
+    private void loadCustomerTable(ArrayList<Customer> customers) {
+        if (customers == null) {
+            customers = customerController.getCustomers();
+        }
 
+        String[] columnNames = {"ID", "Ad", "Müşteri Tipi", "Telefon", "E-Mail", "Adres"};
+
+        Object[][] data = new Object[customers.size()][6];
+
+        for (int i = 0; i < customers.size(); i++) {
+            Customer customer = customers.get(i);
+            data[i][0] = customer.getId();
+            data[i][1] = customer.getName();
+            data[i][2] = Utils.translateCustomerType(customer.getType().name());
+            data[i][3] = customer.getPhone();
+            data[i][4] = customer.getEmail();
+            data[i][5] = customer.getAddress();
+        }
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        this.tbl_customer.setModel(model);
+
+        this.tbl_customer.getColumnModel().getColumn(0).setMinWidth(50);
+        this.tbl_customer.getColumnModel().getColumn(0).setMaxWidth(50);
+        this.tbl_customer.getColumnModel().getColumn(2).setMinWidth(100);
+        this.tbl_customer.getColumnModel().getColumn(2).setMaxWidth(100);
+
+        this.tbl_customer.setDefaultEditor(Object.class, null);
+    }
 
 }
