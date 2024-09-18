@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
 public class DashboardView extends JFrame {
-    private static final int FRAME_WIDTH = 800;
+    private static final int FRAME_WIDTH = 900;
     private static final int FRAME_HEIGHT = 600;
     private static final String FRAME_TITLE = "Müşteri Yönetim Ekranı";
     private final User user;
@@ -102,6 +102,16 @@ public class DashboardView extends JFrame {
 
         this.btn_product_filter.addActionListener(e -> {
             filterProducts();
+        });
+
+        this.btn_f_product_new.addActionListener(e -> {
+            ProductView productView = new ProductView(this);
+            productView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    filterProducts();
+                }
+            });
         });
     }
 
@@ -295,18 +305,13 @@ public class DashboardView extends JFrame {
             int productId = (int) this.tbl_product.getValueAt(selectedRow, 0);
             Product product = productController.getProduct(productId);
 
-            /** TODO:
-             * ProductView productView = new ProductView(this, product);
-             *             productView.addWindowListener(new java.awt.event.WindowAdapter() {
-             *                 @Override
-             *                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-             *                     loadProductTable(null);
-             *                 }
-             *             });
-             */
-
-            System.out.println("Ürün güncelleme ekranı açılacak");
-
+            ProductView productView = new ProductView(this, product);
+            productView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                      filterProducts();
+                }
+            });
         });
 
         itemDelete.addActionListener(e -> {
@@ -321,7 +326,7 @@ public class DashboardView extends JFrame {
                 return;
             }
             productController.deleteProduct(productId);
-            loadProductTable(null);
+            filterProducts();
         });
     }
 
