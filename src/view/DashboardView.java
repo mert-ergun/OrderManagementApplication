@@ -209,6 +209,9 @@ public class DashboardView extends JFrame {
 
         this.tbl_customer.getTableHeader().setReorderingAllowed(false);
 
+        this.tbl_customer.setAutoCreateRowSorter(true);
+        this.tbl_customer.getRowSorter().toggleSortOrder(0);
+
         this.tbl_customer.setDefaultEditor(Object.class, null);
     }
 
@@ -241,6 +244,9 @@ public class DashboardView extends JFrame {
         this.tbl_product.getColumnModel().getColumn(4).setMaxWidth(50);
 
         this.tbl_product.getTableHeader().setReorderingAllowed(false);
+
+        this.tbl_product.setAutoCreateRowSorter(true);
+        this.tbl_product.getRowSorter().toggleSortOrder(0);
 
         this.tbl_product.setDefaultEditor(Object.class, null);
     }
