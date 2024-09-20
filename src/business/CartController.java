@@ -27,4 +27,8 @@ public class CartController {
     public ArrayList<Cart> getCarts() {
         return cartDAO.getCarts();
     }
+
+    public void clearCart() {
+        cartDAO.clearCart();
+    }
 }

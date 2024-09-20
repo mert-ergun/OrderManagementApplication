@@ -130,6 +130,12 @@ public class DashboardView extends JFrame {
                 }
             });
         });
+
+        this.btn_cart_clear.addActionListener(e -> {
+            cartController.clearCart();
+            JOptionPane.showMessageDialog(this, "Sepet temizlendi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+            loadCartTable(null);
+        });
     }
 
     private void setComboBoxCustomer() {
@@ -344,6 +350,7 @@ public class DashboardView extends JFrame {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                     filterCustomers();
+                    setComboBoxCart();
                 }
             });
         });
@@ -360,6 +367,7 @@ public class DashboardView extends JFrame {
                 return;
             }
             customerController.deleteCustomer(customerId);
+            setComboBoxCart();
             filterCustomers();
         });
     }

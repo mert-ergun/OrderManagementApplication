@@ -86,4 +86,15 @@ public class CartDAO {
         }
     }
 
+    public void clearCart() {
+        String query = "DELETE FROM carts";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
