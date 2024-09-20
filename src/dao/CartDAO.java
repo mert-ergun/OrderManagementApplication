@@ -19,7 +19,7 @@ public class CartDAO {
 
     private Cart match(ResultSet rs) throws SQLException {
         return new Cart(rs.getInt("id"),
-                rs.getInt("productId"),
+                rs.getInt("product_id"),
                 productDAO.getProduct(rs.getInt("productId"))
         );
     }
@@ -44,7 +44,7 @@ public class CartDAO {
     }
 
     public void saveCart(Cart cart) {
-        String query = "INSERT INTO carts (productId) VALUES (?)";
+        String query = "INSERT INTO carts (product_id) VALUES (?)";
 
         try {
             PreparedStatement ps = connection.prepareStatement(query);
@@ -56,7 +56,7 @@ public class CartDAO {
     }
 
     public void saveCart(int productId) {
-        String query = "INSERT INTO carts (productId) VALUES (?)";
+        String query = "INSERT INTO carts (product_id) VALUES (?)";
 
         try {
             PreparedStatement ps = connection.prepareStatement(query);
