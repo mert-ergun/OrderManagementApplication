@@ -1,6 +1,6 @@
 ## Simple Order Management System
 
-This is a basic Order Management System built with Java and JDBC, designed to showcase fundamental backend development concepts. It provides a console-based interface for managing customers, products, orders, and a simple shopping cart.
+This is a basic Order Management System built with Java and JDBC, designed to showcase fundamental backend development concepts. It provides a GUI built with Swing for managing customers, products, orders, and a simple shopping cart.
 
 ![](https://github.com/mert-ergun/OrderManagementApplication/blob/main/img.png?raw=true)
 
