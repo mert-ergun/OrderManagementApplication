@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OrderDAO {
     private Connection connection;
@@ -50,6 +51,24 @@ public class OrderDAO {
         }
 
         return order;
+    }
+
+    public ArrayList<Order> getOrders() {
+        String query = "SELECT * FROM orders";
+        ArrayList<Order> orders = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                orders.add(match(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return orders;
     }
 
     public void saveOrder(int customerId, int productId, int price, String note) {
