@@ -1,8 +1,10 @@
 package view;
 
+import business.CartController;
 import business.CustomerController;
 import business.ProductController;
 import core.Utils;
+import entity.Cart;
 import entity.Customer;
 import entity.User;
 import entity.Product;
@@ -19,6 +21,7 @@ public class DashboardView extends JFrame {
 
     private final CustomerController customerController = new CustomerController();
     private final ProductController productController = new ProductController();
+    private final CartController cartController = new CartController();
 
     private JPanel container;
     private JLabel txt_welcome;
@@ -47,6 +50,18 @@ public class DashboardView extends JFrame {
     private JButton btn_product_filter;
     private JButton btn_f_clear_product;
     private JButton btn_f_product_new;
+    private JPanel pnl_cart;
+    private JPanel pnl_cart_top;
+    private JScrollPane scrl_cart;
+    private JLabel lbl_cart_selectcustomer;
+    private JLabel lbl_cart_price;
+    private JLabel lbl_cart_count;
+    private JComboBox cmb_cart_customer;
+    private JLabel lbl_cart_price_txt;
+    private JLabel lbl_cart_count_txt;
+    private JButton btn_cart_clear;
+    private JButton btn_cart_create;
+    private JTable tbl_cart;
 
     private JPopupMenu customerMenu = new JPopupMenu();
     private JPopupMenu productMenu = new JPopupMenu();
@@ -296,9 +311,11 @@ public class DashboardView extends JFrame {
     private void loadProductMenu() {
         JMenuItem itemUpdate = new JMenuItem("Güncelle");
         JMenuItem itemDelete = new JMenuItem("Sil");
+        JMenuItem itemAddToCart = new JMenuItem("Sepete Ekle");
 
         productMenu.add(itemUpdate);
         productMenu.add(itemDelete);
+        productMenu.add(itemAddToCart);
 
         tbl_product.setComponentPopupMenu(productMenu);
 
@@ -333,6 +350,26 @@ public class DashboardView extends JFrame {
             }
             productController.deleteProduct(productId);
             filterProducts();
+        });
+
+        itemAddToCart.addActionListener(e -> {
+            int selectedRow = this.tbl_product.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+
+            int productId = (int) this.tbl_product.getValueAt(selectedRow, 0);
+            Product product = productController.getProduct(productId);
+
+            if (product.getStock() == 0) {
+                JOptionPane.showMessageDialog(this, "Stokta ürün bulunmamaktadır.", "Stok Hatası", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Cart cart = new Cart(productId);
+            cartController.saveCart(cart);
+
+            JOptionPane.showMessageDialog(this, "Ürün sepete eklendi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
         });
     }
 
