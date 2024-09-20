@@ -389,6 +389,7 @@ public class DashboardView extends JFrame {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                       filterProducts();
+                      loadCartTable(null);
                 }
             });
         });
@@ -405,6 +406,7 @@ public class DashboardView extends JFrame {
                 return;
             }
             productController.deleteProduct(productId);
+            loadCartTable(null);
             filterProducts();
         });
 
@@ -424,6 +426,7 @@ public class DashboardView extends JFrame {
 
             Cart cart = new Cart(productId);
             cartController.saveCart(cart);
+            loadCartTable(null);
 
             JOptionPane.showMessageDialog(this, "Ürün sepete eklendi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
         });
