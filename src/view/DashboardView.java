@@ -138,6 +138,41 @@ public class DashboardView extends JFrame {
             JOptionPane.showMessageDialog(this, "Sepet temizlendi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
             loadCartTable(null);
         });
+
+        this.btn_cart_create.addActionListener(e -> {
+            int selectedCustomerIndex = this.cmb_cart_customer.getSelectedIndex();
+            if (selectedCustomerIndex == 0) {
+                JOptionPane.showMessageDialog(this, "Lütfen müşteri seçiniz.", "Müşteri Seçimi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int customerId = customerController.getCustomers().get(selectedCustomerIndex - 1).getId();
+            ArrayList<Cart> carts = cartController.getCarts();
+            if (carts.size() == 0) {
+                JOptionPane.showMessageDialog(this, "Sepetinizde ürün bulunmamaktadır.", "Sepet Boş", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int totalPrice = 0;
+            for (Cart cart : carts) {
+                Product product = productController.getProduct(cart.getProductId());
+                totalPrice += product.getPrice();
+            }
+
+            int choice = JOptionPane.showConfirmDialog(this, "Toplam tutar: " + totalPrice + " TL\nSatışı gerçekleştirmek istediğinize emin misiniz?", "Satış", JOptionPane.YES_NO_OPTION);
+            if (choice != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            OrderView orderView = new OrderView(this, customerController.getCustomer(customerId));
+            orderView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    loadCartTable(null);
+                    loadCartTable(null);
+                }
+            });
+        });
     }
 
     private void setComboBoxCustomer() {
