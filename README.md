@@ -30,7 +30,7 @@ This is a basic Order Management System built with Java and JDBC, designed to sh
 
 **Getting Started:**
 
-1. **Clone the repository:** `git clone https://github.com/mert-ergun/order-management-java.git`
+1. **Clone the repository:** `git clone https://github.com/mert-ergun/OrderManagementApplication.git`
 2. **Database Setup:**
     - Create a PostgreSQL database.
     - **Update the `config.properties` file with your database credentials.**
