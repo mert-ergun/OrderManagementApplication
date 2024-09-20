@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderDAO {
@@ -71,15 +72,16 @@ public class OrderDAO {
         return orders;
     }
 
-    public void saveOrder(int customerId, int productId, int price, String note) {
-        String query = "INSERT INTO orders (customer_id, product_id, price, note) VALUES (?, ?, ?, ?)";
+    public void saveOrder(int customerId, int productId, int price, LocalDate date, String note) {
+        String query = "INSERT INTO orders (customer_id, product_id, price, date, note) VALUES (?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, customerId);
             ps.setInt(2, productId);
             ps.setInt(3, price);
-            ps.setString(4, note);
+            ps.setDate(4, java.sql.Date.valueOf(date));
+            ps.setString(5, note);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -3,6 +3,7 @@ package business;
 import dao.OrderDAO;
 import entity.Order;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderController {
@@ -20,8 +21,8 @@ public class OrderController {
         return orderDAO.getOrders();
     }
 
-    public void saveOrder(int customerId, int productId, int price, String note) {
-        orderDAO.saveOrder(customerId, productId, price, note);
+    public void saveOrder(int customerId, int productId, int price, LocalDate date, String note) {
+        orderDAO.saveOrder(customerId, productId, price, date, note);
     }
 
     public void deleteOrder(int id) {
