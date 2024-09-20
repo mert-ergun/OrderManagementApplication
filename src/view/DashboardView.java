@@ -134,6 +134,7 @@ public class DashboardView extends JFrame {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                     filterProducts();
+                    setComboBoxCart();
                 }
             });
         });
@@ -174,7 +175,7 @@ public class DashboardView extends JFrame {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                     loadCartTable(null);
-                    loadCartTable(null);
+                    loadOrderTable(null);
                 }
             });
         });
