@@ -28,4 +28,12 @@ public class OrderController {
     public void deleteOrder(int id) {
         orderDAO.deleteOrder(id);
     }
+
+    public void deleteOrdersByProduct(int productId) {
+        orderDAO.deleteOrdersByProduct(productId);
+    }
+
+    public void deleteOrdersByCustomer(int customerId) {
+        orderDAO.deleteOrdersByCustomer(customerId);
+    }
 }

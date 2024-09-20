@@ -109,4 +109,16 @@ public class CartDAO {
         }
     }
 
+    public void deleteCartsByProduct(int productId) {
+        String query = "DELETE FROM carts WHERE product_id = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

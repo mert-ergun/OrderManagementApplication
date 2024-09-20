@@ -37,6 +37,12 @@ public class ProductController {
     }
 
     public void deleteProduct(int id) {
+        OrderController orderController = new OrderController();
+        orderController.deleteOrdersByProduct(id);
+
+        CartController cartController = new CartController();
+        cartController.deleteCartsByProduct(id);
+
         productDAO.deleteProduct(id);
     }
 

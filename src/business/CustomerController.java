@@ -2,6 +2,7 @@ package business;
 
 import dao.CustomerDAO;
 import entity.Customer;
+import entity.Order;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,8 @@ public class CustomerController {
     }
 
     public void deleteCustomer(int id) {
+        OrderController orderController = new OrderController();
+        orderController.deleteOrdersByCustomer(id);
         customerDAO.deleteCustomer(id);
     }
 }

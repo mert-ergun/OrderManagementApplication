@@ -35,4 +35,8 @@ public class CartController {
     public void deleteCart(int id) {
         cartDAO.deleteCart(id);
     }
+
+    public void deleteCartsByProduct(int productId) {
+        cartDAO.deleteCartsByProduct(productId);
+    }
 }

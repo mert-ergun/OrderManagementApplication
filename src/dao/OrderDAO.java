@@ -99,4 +99,28 @@ public class OrderDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteOrdersByCustomer(int customerId) {
+        String query = "DELETE FROM orders WHERE customer_id = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, customerId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteOrdersByProduct(int productId) {
+        String query = "DELETE FROM orders WHERE product_id = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
