@@ -2,12 +2,10 @@ package view;
 
 import business.CartController;
 import business.CustomerController;
+import business.OrderController;
 import business.ProductController;
 import core.Utils;
-import entity.Cart;
-import entity.Customer;
-import entity.User;
-import entity.Product;
+import entity.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +20,7 @@ public class DashboardView extends JFrame {
     private final CustomerController customerController = new CustomerController();
     private final ProductController productController = new ProductController();
     private final CartController cartController = new CartController();
+    private final OrderController orderController = new OrderController();
 
     private JPanel container;
     private JLabel txt_welcome;
@@ -62,10 +61,14 @@ public class DashboardView extends JFrame {
     private JButton btn_cart_clear;
     private JButton btn_cart_create;
     private JTable tbl_cart;
+    private JPanel pnl_order;
+    private JScrollPane scrl_order;
+    private JTable tbl_order;
 
     private JPopupMenu customerMenu = new JPopupMenu();
     private JPopupMenu productMenu = new JPopupMenu();
     private JPopupMenu cartMenu = new JPopupMenu();
+    private JPopupMenu orderMenu = new JPopupMenu();
 
     public DashboardView(User user) {
         this.user = user;
@@ -77,9 +80,11 @@ public class DashboardView extends JFrame {
         loadCustomerTable(null);
         loadProductTable(null);
         loadCartTable(null);
+        loadOrderTable(null);
         loadCustomerMenu();
         loadProductMenu();
         loadCartMenu();
+        loadOrderMenu();
     }
 
     private void configureFrame() {
@@ -365,6 +370,46 @@ public class DashboardView extends JFrame {
         this.tbl_cart.setDefaultEditor(Object.class, null);
     }
 
+    private void loadOrderTable(ArrayList<Order> orders) {
+        String[] columnNames = {"ID", "Müşteri", "Ürün", "Fiyat", "Tarih", "Not"};
+
+        if (orders == null) {
+            orders = orderController.getOrders();
+        }
+
+        Object[][] data = new Object[orders.size()][6];
+
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            Customer customer = customerController.getCustomer(order.getCustomerId());
+            Product product = productController.getProduct(order.getProductId());
+            data[i][0] = order.getId();
+            data[i][1] = customer.getName();
+            data[i][2] = product.getName();
+            data[i][3] = product.getPrice();
+            data[i][4] = order.getDate();
+            data[i][5] = order.getNote();
+        }
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        this.tbl_order.setModel(model);
+
+        this.tbl_order.getColumnModel().getColumn(0).setMinWidth(50);
+        this.tbl_order.getColumnModel().getColumn(0).setMaxWidth(50);
+        this.tbl_order.getColumnModel().getColumn(3).setMinWidth(100);
+        this.tbl_order.getColumnModel().getColumn(3).setMaxWidth(100);
+        this.tbl_order.getColumnModel().getColumn(4).setMinWidth(100);
+        this.tbl_order.getColumnModel().getColumn(4).setMaxWidth(100);
+        this.tbl_order.getColumnModel().getColumn(5).setMinWidth(200);
+
+
+        this.tbl_order.getTableHeader().setReorderingAllowed(false);
+
+        this.tbl_order.setAutoCreateRowSorter(true);
+
+        this.tbl_order.setDefaultEditor(Object.class, null);
+    }
+
     private void loadCustomerMenu() {
         JMenuItem itemUpdate = new JMenuItem("Güncelle");
         JMenuItem itemDelete = new JMenuItem("Sil");
@@ -496,6 +541,28 @@ public class DashboardView extends JFrame {
             }
             cartController.deleteCart(cartId);
             loadCartTable(null);
+        });
+    }
+
+    private void loadOrderMenu() {
+        JMenuItem itemDelete = new JMenuItem("Sil");
+
+        orderMenu.add(itemDelete);
+        tbl_order.setComponentPopupMenu(orderMenu);
+
+        itemDelete.addActionListener(e -> {
+            int selectedRow = this.tbl_order.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+
+            int orderId = (int) this.tbl_order.getValueAt(selectedRow, 0);
+            int choice = JOptionPane.showConfirmDialog(this, "Siparişi silmek istediğinize emin misiniz?", "Sipariş Sil", JOptionPane.YES_NO_OPTION);
+            if (choice != JOptionPane.YES_OPTION) {
+                return;
+            }
+            orderController.deleteOrder(orderId);
+            loadOrderTable(null);
         });
     }
 
