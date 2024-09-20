@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CartDAO {
     Connection connection;
@@ -20,7 +21,7 @@ public class CartDAO {
     private Cart match(ResultSet rs) throws SQLException {
         return new Cart(rs.getInt("id"),
                 rs.getInt("product_id"),
-                productDAO.getProduct(rs.getInt("productId"))
+                productDAO.getProduct(rs.getInt("product_id"))
         );
     }
 
@@ -41,6 +42,24 @@ public class CartDAO {
         }
 
         return cart;
+    }
+
+    public ArrayList<Cart> getCarts() {
+        String query = "SELECT * FROM carts";
+        ArrayList<Cart> carts = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                carts.add(match(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return carts;
     }
 
     public void saveCart(Cart cart) {

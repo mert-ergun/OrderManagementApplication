@@ -74,6 +74,7 @@ public class DashboardView extends JFrame {
         setListeners();
         loadCustomerTable(null);
         loadProductTable(null);
+        loadCartTable(null);
         loadCustomerMenu();
         loadProductMenu();
     }
@@ -264,6 +265,50 @@ public class DashboardView extends JFrame {
         this.tbl_product.getRowSorter().toggleSortOrder(0);
 
         this.tbl_product.setDefaultEditor(Object.class, null);
+    }
+
+    private void loadCartTable(ArrayList<Cart> carts) {
+        String[] columnNames = {"ID", "Ürün Adı", "Ürün Kodu", "Fiyat", "Stok"};
+
+        if (carts == null) {
+            carts = cartController.getCarts();
+        }
+
+        Object[][] data = new Object[carts.size()][5];
+
+        int totalPrice = 0;
+        int cartCount = 0;
+
+        for (int i = 0; i < carts.size(); i++) {
+            Cart cart = carts.get(i);
+            Product product = productController.getProduct(cart.getProductId());
+            data[i][0] = cart.getId();
+            data[i][1] = product.getName();
+            data[i][2] = product.getCode();
+            data[i][3] = product.getPrice();
+            data[i][4] = product.getStock();
+            totalPrice += product.getPrice();
+            cartCount++;
+        }
+
+        lbl_cart_price_txt.setText(String.valueOf(totalPrice) + " TL");
+        lbl_cart_count_txt.setText(String.valueOf(cartCount) + " Adet");
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        this.tbl_cart.setModel(model);
+
+        this.tbl_cart.getColumnModel().getColumn(0).setMinWidth(50);
+        this.tbl_cart.getColumnModel().getColumn(0).setMaxWidth(50);
+        this.tbl_cart.getColumnModel().getColumn(3).setMinWidth(100);
+        this.tbl_cart.getColumnModel().getColumn(3).setMaxWidth(100);
+        this.tbl_cart.getColumnModel().getColumn(4).setMinWidth(50);
+        this.tbl_cart.getColumnModel().getColumn(4).setMaxWidth(50);
+
+        this.tbl_cart.getTableHeader().setReorderingAllowed(false);
+
+        this.tbl_cart.setAutoCreateRowSorter(true);
+
+        this.tbl_cart.setDefaultEditor(Object.class, null);
     }
 
     private void loadCustomerMenu() {

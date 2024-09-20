@@ -3,6 +3,8 @@ package business;
 import dao.CartDAO;
 import entity.Cart;
 
+import java.util.ArrayList;
+
 public class CartController {
     private final CartDAO cartDAO;
 
@@ -20,5 +22,9 @@ public class CartController {
 
     public Cart getCart(int id) {
         return cartDAO.getCart(id);
+    }
+
+    public ArrayList<Cart> getCarts() {
+        return cartDAO.getCarts();
     }
 }
