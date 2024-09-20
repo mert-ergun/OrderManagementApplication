@@ -33,4 +33,15 @@ public class Utils {
             default -> "Belirtilmemiş";
         };
     }
+
+    public static String getCurrentDate() {
+        java.util.Date date = new java.util.Date();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(date);
+    }
+
+    public static java.time.LocalDate stringToLocalDate(String date) {
+        String[] parts = date.split("/");
+        return java.time.LocalDate.of(Integer.parseInt(parts[2]), Integer.parseInt(parts[1]), Integer.parseInt(parts[0]));
+    }
 }
