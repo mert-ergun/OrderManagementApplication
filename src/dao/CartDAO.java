@@ -10,8 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CartDAO {
-    Connection connection;
-    ProductDAO productDAO;
+    private Connection connection;
+    private ProductDAO productDAO;
 
     public CartDAO() {
         connection = Database.getInstance();
