@@ -71,6 +71,7 @@ public class DashboardView extends JFrame {
         configureFrame();
         setComboBoxCustomer();
         setComboBoxProduct();
+        setComboBoxCart();
         setListeners();
         loadCustomerTable(null);
         loadProductTable(null);
@@ -145,6 +146,16 @@ public class DashboardView extends JFrame {
         stockTypes.addElement("Stokta Var");
         stockTypes.addElement("Stokta Yok");
         this.cmb_f_product_stock.setModel(stockTypes);
+    }
+
+    private void setComboBoxCart() {
+        DefaultComboBoxModel<String> customers = new DefaultComboBoxModel<>();
+        ArrayList<Customer> customerList = customerController.getCustomers();
+        customers.addElement("Müşteri Seçiniz");
+        for (Customer customer : customerList) {
+            customers.addElement(customer.getName());
+        }
+        this.cmb_cart_customer.setModel(customers);
     }
 
     private void handleLogout() {
