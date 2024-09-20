@@ -65,6 +65,7 @@ public class DashboardView extends JFrame {
 
     private JPopupMenu customerMenu = new JPopupMenu();
     private JPopupMenu productMenu = new JPopupMenu();
+    private JPopupMenu cartMenu = new JPopupMenu();
 
     public DashboardView(User user) {
         this.user = user;
@@ -78,6 +79,7 @@ public class DashboardView extends JFrame {
         loadCartTable(null);
         loadCustomerMenu();
         loadProductMenu();
+        loadCartMenu();
     }
 
     private void configureFrame() {
@@ -437,6 +439,28 @@ public class DashboardView extends JFrame {
             loadCartTable(null);
 
             JOptionPane.showMessageDialog(this, "Ürün sepete eklendi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+        });
+    }
+
+    private void loadCartMenu() {
+        JMenuItem itemDelete = new JMenuItem("Sil");
+
+        cartMenu.add(itemDelete);
+        tbl_cart.setComponentPopupMenu(cartMenu);
+
+        itemDelete.addActionListener(e -> {
+            int selectedRow = this.tbl_cart.getSelectedRow();
+            if (selectedRow == -1) {
+                return;
+            }
+
+            int cartId = (int) this.tbl_cart.getValueAt(selectedRow, 0);
+            int choice = JOptionPane.showConfirmDialog(this, "Ürünü silmek istediğinize emin misiniz?", "Ürün Sil", JOptionPane.YES_NO_OPTION);
+            if (choice != JOptionPane.YES_OPTION) {
+                return;
+            }
+            cartController.deleteCart(cartId);
+            loadCartTable(null);
         });
     }
 

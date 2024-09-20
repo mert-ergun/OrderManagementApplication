@@ -31,4 +31,8 @@ public class CartController {
     public void clearCart() {
         cartDAO.clearCart();
     }
+
+    public void deleteCart(int id) {
+        cartDAO.deleteCart(id);
+    }
 }

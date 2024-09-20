@@ -97,4 +97,16 @@ public class CartDAO {
         }
     }
 
+    public void deleteCart(int id) {
+        String query = "DELETE FROM carts WHERE id = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
